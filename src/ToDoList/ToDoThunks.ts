@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from "../../axiosApi.ts";
-import { Task, TaskApi, TaskChangeThunks } from "../types";
+import { Task, TaskApi, TaskChangeThunks, TaskForm } from "../types";
 import { RootState } from "../app/store.ts";
 
 export const fetchToDoList = createAsyncThunk<Task[], void>(
@@ -8,11 +8,11 @@ export const fetchToDoList = createAsyncThunk<Task[], void>(
   async () => {
     const response = await axiosApi<TaskApi>("tasks.json");
     if (response.data) {
-      const objPages = response.data;
-      const objKeys = Object.keys(objPages);
+      const objTasks = response.data;
+      const objKeys = Object.keys(objTasks);
       return objKeys.map((id) => ({
         id: id,
-        ...objPages[id],
+        ...objTasks[id],
       }));
     } else {
       return [];
@@ -42,3 +42,14 @@ export const deleteToDo = createAsyncThunk<
   await axiosApi.delete(`tasks/${id}.json`);
   return id;
 });
+
+export const createToDo = createAsyncThunk<Task, TaskForm>(
+  "toDoList/createToDo",
+  async (taskForm) => {
+    const response = await axiosApi.post("tasks.json", taskForm);
+    return {
+      id: response.data.name,
+      ...taskForm,
+    };
+  },
+);
