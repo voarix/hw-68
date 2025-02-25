@@ -6,7 +6,6 @@ export const fetchToDoList = createAsyncThunk<Task[], void>(
   'toDoList/fetchToDoList',
   async () => {
     const response = await axiosApi('tasks.json');
-    console.log(response.data);
     if (response.data) {
       const objPages = response.data;
       const objKeys = Object.keys(objPages);
