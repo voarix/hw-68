@@ -1,6 +1,6 @@
 import { Task, TaskChangeThunks } from "../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { changeToDoStatus, fetchToDoList } from "./ToDoThunks.ts";
+import { changeToDoStatus, deleteToDo, fetchToDoList } from "./ToDoThunks.ts";
 
 interface ToDoListSlice {
   tasks: Task[];
@@ -54,6 +54,19 @@ export const ToDoListSlice = createSlice({
         },
       )
       .addCase(changeToDoStatus.rejected, (state) => {
+        state.loading = false;
+        state.error = false;
+      })
+
+      .addCase(deleteToDo.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(deleteToDo.fulfilled, (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      })
+      .addCase(deleteToDo.rejected, (state) => {
         state.loading = false;
         state.error = false;
       });

@@ -25,9 +25,20 @@ export const changeToDoStatus = createAsyncThunk<
   TaskChangeThunks,
   { state: RootState }
 >("toDoList/changeToDoStatus", async ({ id, status }, thunkAPI) => {
-  const task = thunkAPI.getState().toDoList.tasks.find(task => task.id === id);
+  const task = thunkAPI
+    .getState()
+    .toDoList.tasks.find((task) => task.id === id);
   const newTask = { ...task, status };
 
   await axiosApi.put(`tasks/${id}.json`, newTask);
   return { id, status };
+});
+
+export const deleteToDo = createAsyncThunk<
+  string,
+  string,
+  { state: RootState }
+>("toDoList/deleteToDo", async (id) => {
+  await axiosApi.delete(`tasks/${id}.json`);
+  return id;
 });
