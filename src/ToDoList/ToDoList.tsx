@@ -7,22 +7,22 @@ import Loader from "../UI/Loader.tsx";
 
 const ToDoList = () => {
   const toDoListValue = useSelector((state: RootState) => state.toDoList.tasks);
-  const toDoListLoading = useSelector((state: RootState) => state.toDoList.loading);
+  const toDoListLoading = useSelector(
+    (state: RootState) => state.toDoList.loading,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchToDoList());
   }, [dispatch]);
 
-  console.log(toDoListValue);
-
   return (
     <div className="container mt-4">
-      { toDoListLoading ? <Loader/> :
-        toDoListValue.map((toDo) => (
-          <ToDo toDo={toDo} key={toDo.id}/>
-        ))
-      }
+      {toDoListLoading ? (
+        <Loader />
+      ) : (
+        toDoListValue.map((toDo) => <ToDo toDo={toDo} key={toDo.id} />)
+      )}
     </div>
   );
 };

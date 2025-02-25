@@ -1,11 +1,11 @@
-import { Task } from "../types";
+import { Task, TaskChangeThunks } from "../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchToDoList } from "./ToDoThunks.ts";
+import { changeToDoStatus, fetchToDoList } from "./ToDoThunks.ts";
 
 interface ToDoListSlice {
   tasks: Task[];
   loading: boolean;
-  error: false
+  error: false;
 }
 
 const initialState: ToDoListSlice = {
@@ -15,7 +15,7 @@ const initialState: ToDoListSlice = {
 };
 
 export const ToDoListSlice = createSlice({
-  name: 'toDoList',
+  name: "toDoList",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -23,10 +23,37 @@ export const ToDoListSlice = createSlice({
       .addCase(fetchToDoList.pending, (state) => {
         state.loading = true;
         state.error = false;
-      }).addCase(fetchToDoList.fulfilled, (state, action: PayloadAction<Task[]>) => {
+      })
+      .addCase(
+        fetchToDoList.fulfilled,
+        (state, action: PayloadAction<Task[]>) => {
+          state.loading = false;
+          state.tasks = action.payload;
+        },
+      )
+      .addCase(fetchToDoList.rejected, (state) => {
         state.loading = false;
-        state.tasks = action.payload;
-      }).addCase(fetchToDoList.rejected, (state) => {
+        state.error = false;
+      })
+
+      .addCase(changeToDoStatus.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(
+        changeToDoStatus.fulfilled,
+        (state, action: PayloadAction<TaskChangeThunks>) => {
+          state.loading = false;
+          state.tasks = state.tasks.map((task) => {
+            if (task.id === action.payload.id) {
+              return { ...task, status: action.payload.status };
+            } else {
+              return task;
+            }
+          });
+        },
+      )
+      .addCase(changeToDoStatus.rejected, (state) => {
         state.loading = false;
         state.error = false;
       });

@@ -4,7 +4,7 @@ import ToDoList from "./ToDoList/ToDoList.tsx";
 const App = () => {
   return (
     <>
-      <ToDoList/>
+      <ToDoList />
     </>
   );
 };

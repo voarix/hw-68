@@ -1,14 +1,19 @@
 export interface Task {
-    id: string;
-    title: string;
-    status: boolean;
+  id: string;
+  title: string;
+  status: boolean;
 }
 
 export interface TaskForm {
-    title: string;
-    status: boolean;
+  title: string;
+  status: boolean;
 }
 
 export interface TaskApi {
-    [id: string]: TaskForm;
+  [id: string]: TaskForm;
+}
+
+export interface TaskChangeThunks {
+  id: string;
+  status: boolean;
 }

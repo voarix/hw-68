@@ -5,7 +5,7 @@ import { store } from "./app/store.ts";
 import { Provider } from "react-redux";
 
 createRoot(document.getElementById("root")!).render(
-    <Provider store={store}>
-      <App />
-    </Provider>
+  <Provider store={store}>
+    <App />
+  </Provider>,
 );
